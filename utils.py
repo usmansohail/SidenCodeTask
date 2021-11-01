@@ -13,15 +13,14 @@ class Stream:
     def iterate(self):
         return self.response.iter_content(chunk_size=self.chunk_size)
 
-stream = Stream(
-    "https://raw.githubusercontent.com/usmansohail/SidenCodeTask/main/siden_coding_test_file_sample.txt",
-    1024)
-
-stream = Stream(
-    "https://drive.google.com/uc?id=1mmFQVmWJT4entvG5OVOSxcG_uT9XUSAa",
-    1024)
 
 if __name__ == "__main__":
+    # this forms somewhat of a unit test. 
+    # TODO: make this into a clean unit test
+
+    stream = Stream(
+        "https://raw.githubusercontent.com/usmansohail/SidenCodeTask/main/siden_coding_test_file_sample.txt",
+        1024)
     for chunk in stream.iterate():
         if(chunk):
             for word in chunk.decode("utf-8").split("\n"):
