@@ -21,7 +21,8 @@ stream = Stream(
     "https://drive.google.com/uc?id=1mmFQVmWJT4entvG5OVOSxcG_uT9XUSAa",
     1024)
 
-for chunk in stream.iterate():
-    if(chunk):
-        for word in chunk.decode("utf-8").split("\n"):
-            print(word)
+if __name__ == "__main__":
+    for chunk in stream.iterate():
+        if(chunk):
+            for word in chunk.decode("utf-8").split("\n"):
+                print(word)

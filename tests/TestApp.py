@@ -13,7 +13,8 @@ def assert_correct_counts(correct_count):
                      stream=True)
     assert response.status_code == 200
     for line in response.iter_lines():
-        current_count += 1
+        if len(line) != 0:
+            current_count += 1
     assert current_count == correct_count
 
 '''
@@ -54,7 +55,6 @@ def test_special_characters():
     put_url = f"{base_url}/put-file/"
     data_url = \
         "https://raw.githubusercontent.com/usmansohail/SidenCodeTask/main/tests/example_files/special_chars.txt"
-    print(put_url)
     response = requests.put(put_url, data={"url":data_url})
     assert response.status_code == 200
     assert_correct_counts(10)
@@ -66,12 +66,9 @@ def test_put_provided_file():
     put_url = f"{base_url}/put-file/"
     data_url = \
         "https://raw.githubusercontent.com/usmansohail/SidenCodeTask/main/tests/example_files/siden_coding_test_file_sample.txt"
-    print(put_url)
     response = requests.put(put_url, data={"url":data_url})
     assert response.status_code == 200
-    assert_correct_counts(3024)
+    assert_correct_counts(3023)
 
     # cleanup by putting the empty file again
     test_empty_file()
-
-
