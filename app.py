@@ -57,6 +57,8 @@ def put_file():
             return "success"
         except Exception as e:
             return str(e)
+    else:
+        return "no action needed"
 
 @app.route('/get-file', methods=['GET'])
 def get_file():
