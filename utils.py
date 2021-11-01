@@ -1,37 +1,27 @@
 from urllib.request import Request, urlopen
+import requests as req
 import mmap
 
 
 class Stream:
 
-    def __init__(self, url):
+    def __init__(self, url, chunk_size):
         self.url = url
-        self.f = open('tmpFile.zip', 'wb')
-        self.f.write(b'\0')
-        self.f.close()
-        self.f = open('tmpFile.zip', 'r+b')
-        self.mmaped_file_as_string = mmap.mmap(self.f.fileno(), 0,
-                                          access=mmap.ACCESS_READ)
+        self.chunk_size = chunk_size
+        self.response = req.get(url, stream=True)
 
-        # perform request
-        request = Request(url, self.mmaped_file_as_string)
-        request.add_header("Content-Type", "application/zip")
-        self.response = urlopen(request)
-
-    def close(self):
-        self.mmaped_file_as_string.close()
-        self.f.close()
-
-
-    def readResponse(self):
-        return self.response.read().decode()
-
-
-
+    def iterate(self):
+        return self.response.iter_content(chunk_size=self.chunk_size)
 
 stream = Stream(
-    "https://drive.google.com/uc?id=1mmFQVmWJT4entvG5OVOSxcG_uT9XUSAa")
-for word in stream.mmaped_file_as_string:
-    print(word)
+    "https://raw.githubusercontent.com/usmansohail/SidenCodeTask/main/siden_coding_test_file_sample.txt",
+    1024)
 
-print(stream.readResponse())
+stream = Stream(
+    "https://drive.google.com/uc?id=1mmFQVmWJT4entvG5OVOSxcG_uT9XUSAa",
+    1024)
+
+for chunk in stream.iterate():
+    if(chunk):
+        for word in chunk.decode("utf-8").split("\n"):
+            print(word)
